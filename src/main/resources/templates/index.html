@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>文件管理系统</title>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/angular-ui-router.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link href="/css/bootstrap.min.css"/>
+    <style>
+        *{margin: 0;color:black;}
+        a {text-decoration: none}
+        div[ui-view='top']{display: block;width: 100%;height: 50px;font-size: 20px;text-align: center;padding-top: 20px}
+        div[ui-view='left']{float: left;background:#f2dede;}
+        div[ui-view='bottom']{}
+    </style>
+</head>
+<body>
+<a href=". ">下载文件</a>
+   <div ng-app="app">
+       <div ui-view="top"></div>
+       <div ui-view="left"></div>
+       <div ui-view="right"></div>
+       <div ui-view="bottom"></div>
+   </div>
+
+    <a href="javascript:;" onclick="show2()" style="display: block;height: 82px;width: 85px;border: 1px;background-color: white" ></a>
+
+<script>
+    
+    function  show2() {
+        alert("哈哈");
+    }
+    
+    var app = angular.module('app',['ui.router']);
+    app.config(['$stateProvider','$urlRouterProvider',function ($stateProvider,$urlRouterProvider) {
+        $urlRouterProvider.otherwise('/book');
+        $stateProvider
+            .state('book',{
+                url:'/book',
+                views:{
+                    'top':{
+                        templateUrl:'home_top.html'
+                    },
+                    'left':{
+                        templateUrl:'book.html',
+                        controller:'book'
+                    },
+                    'right':{
+                        templateUrl:'bookList.html'
+                    },
+                    'bottom':{
+                        templateUrl:'home_bottom.html'
+                    }
+                }
+
+            })
+            .state('video',{
+                url:'/video',
+                views:{
+                    'top':{
+                        templateUrl:'home_top.html'
+                    },
+                    'left':{
+                        templateUrl:'video.html'
+                    },
+                    'right':{
+                        templateUrl:'videoList.html'
+                    },
+                    'bottom':{
+                        templateUrl:'home_bottom.html'
+                    }
+                }
+            })
+    }]);
+    app.controller('book',['$scope','$stateParams','$http',function ($scope,$stateParams,$http) {
+        
+        $scope.showBook = function () {
+            $http({
+                method: 'post',
+                url: 'book/getList'
+            }).then(function (response) {
+                console.log("book :" + response.data);
+                $scope.bookList = response.data;
+
+            }, function (response) {
+                console.log("book err:" + response.data);
+            });
+        }
+    }]);
+
+   </script>
+</body>
+</html>
