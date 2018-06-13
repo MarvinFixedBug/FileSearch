@@ -1,7 +1,10 @@
 package com.cj.file_manager;
 
 
+import javassist.compiler.ast.FieldDecl;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 public class StringTest {
 
@@ -23,12 +26,26 @@ public class StringTest {
         System.out.print(str.length());
 
 
-    }  @Test
-    public void stringTest3(){
-        String str = "    ";
+    }
+    @Test
+    public void stringTest3() throws NoSuchFieldException, IllegalAccessException {
+        Integer a = 1;
+        Integer b = 2;
+        System.out.println(a+"------------"+b);
+        swap(a,b);
+        System.out.println(a+"------------"+b);
 
-        System.out.print(str.length());
+    }
+    public static void swap(Integer number1,Integer numebr2) throws NoSuchFieldException, IllegalAccessException {
+        int tempNumber = number1.intValue();
 
+        Field declaredField = Integer.class.getDeclaredField("value");
+
+        declaredField.setAccessible(true);
+
+        declaredField.setInt(number1,numebr2);
+
+        declaredField.setInt(numebr2,tempNumber);
 
     }
 
